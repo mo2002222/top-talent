@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "date-fns": "^4.1.0"
+  },
+  "scripts": {
+    "front" : "cd front-end && npm run dev",
+    "back": "cd back-end && npm run dev"
+  }
+}

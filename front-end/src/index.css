@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Restore browser default styles for headings */
+@layer base {
+  h1 {
+    @apply text-5xl;
+  }
+  h2 {
+    @apply text-4xl;
+  }
+  h3 {
+    @apply text-3xl;
+  }
+  h4 {
+    @apply text-2xl;
+  }
+  h5 {
+    @apply text-xl;
+  }
+  h6 {
+    @apply text-lg;
+  }
+}
+
+body {
+  color: #fff;
+  background-image: linear-gradient(to right, #07011c, #021b41);
+  height: 100vh;
+  margin: 0;
+  font-family:'Fira Sans', sans-serif;
+  font-size: 14px;
+  /* font-size: 20px; */
+  /* line-height: 28px; */
+  /* letter-spacing: 1px; */
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+/* ✅ Hide scrollbar only on small & medium screens */
+@media (max-width: 1023px) { /* md and below */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE & Edge */
+    scrollbar-width: none;     /* Firefox */
+  }
+}

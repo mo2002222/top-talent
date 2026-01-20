@@ -1,0 +1,142 @@
+{
+  "world-cup": "https://media.api-sports.io/football/leagues/1.png",
+  "uefa-champions-league": "https://media.api-sports.io/football/leagues/2.png",
+  "uefa-europa-league": "https://media.api-sports.io/football/leagues/3.png",
+  "uefa-europa-conference-league": "https://media.api-sports.io/football/leagues/848.png",
+
+  "premier-league": "https://media.api-sports.io/football/leagues/39.png",
+  "championship": "https://media.api-sports.io/football/leagues/40.png",
+  "league-one": "https://media.api-sports.io/football/leagues/41.png",
+  "league-two": "https://media.api-sports.io/football/leagues/42.png",
+
+  "la-liga": "https://media.api-sports.io/football/leagues/140.png",
+  "la-liga-2": "https://media.api-sports.io/football/leagues/141.png",
+
+  "bundesliga": "https://media.api-sports.io/football/leagues/78.png",
+  "bundesliga-2": "https://media.api-sports.io/football/leagues/79.png",
+  "3-liga": "https://media.api-sports.io/football/leagues/80.png",
+
+  "serie-a": "https://media.api-sports.io/football/leagues/135.png",
+  "serie-b": "https://media.api-sports.io/football/leagues/136.png",
+
+  "ligue-1": "https://media.api-sports.io/football/leagues/61.png",
+  "ligue-2": "https://media.api-sports.io/football/leagues/62.png",
+
+  "eredivisie": "https://media.api-sports.io/football/leagues/88.png",
+  "eerste-divisie": "https://media.api-sports.io/football/leagues/89.png",
+
+  "primeira-liga": "https://media.api-sports.io/football/leagues/94.png",
+  "segunda-liga-portugal": "https://media.api-sports.io/football/leagues/95.png",
+
+  "scottish-premiership": "https://media.api-sports.io/football/leagues/179.png",
+  "scottish-championship": "https://media.api-sports.io/football/leagues/180.png",
+
+  "belgian-pro-league": "https://media.api-sports.io/football/leagues/144.png",
+
+  "turkish-super-lig": "https://media.api-sports.io/football/leagues/203.png",
+
+  "russian-premier-league": "https://media.api-sports.io/football/leagues/235.png",
+
+  "ukrainian-premier-league": "https://media.api-sports.io/football/leagues/237.png",
+
+  "swiss-super-league": "https://media.api-sports.io/football/leagues/207.png",
+
+  "austrian-bundesliga": "https://media.api-sports.io/football/leagues/218.png",
+
+  "danish-superliga": "https://media.api-sports.io/football/leagues/84.png",
+
+  "norwegian-eliteserien": "https://media.api-sports.io/football/leagues/103.png",
+
+  "swedish-allsvenskan": "https://media.api-sports.io/football/leagues/113.png",
+  "superettan": "https://media.api-sports.io/football/leagues/114.png",
+
+  "polish-ekstraklasa": "https://media.api-sports.io/football/leagues/106.png",
+
+  "czech-first-league": "https://media.api-sports.io/football/leagues/319.png",
+
+  "greek-super-league": "https://media.api-sports.io/football/leagues/392.png",
+
+  "serbian-superliga": "https://media.api-sports.io/football/leagues/286.png",
+
+  "croatian-first-football-league": "https://media.api-sports.io/football/leagues/279.png",
+
+  "slovenia-prva-liga": "https://media.api-sports.io/football/leagues/380.png",
+
+  "slovak-super-liga": "https://media.api-sports.io/football/leagues/333.png",
+
+  "hungary-nb1": "https://media.api-sports.io/football/leagues/266.png",
+
+  "romania-liga-1": "https://media.api-sports.io/football/leagues/283.png",
+
+  "bulgaria-first-league": "https://media.api-sports.io/football/leagues/268.png",
+
+  "cyprus-first-division": "https://media.api-sports.io/football/leagues/238.png",
+
+  "israel-premier-league": "https://media.api-sports.io/football/leagues/267.png",
+
+  "saudi-pro-league": "https://media.api-sports.io/football/leagues/307.png",
+  "saudi-division-1": "https://media.api-sports.io/football/leagues/308.png",
+
+  "qatar-stars-league": "https://media.api-sports.io/football/leagues/312.png",
+
+  "uae-pro-league": "https://media.api-sports.io/football/leagues/316.png",
+
+  "iran-pro-league": "https://media.api-sports.io/football/leagues/290.png",
+
+  "indian-super-league": "https://media.api-sports.io/football/leagues/323.png",
+
+  "j1-league": "https://media.api-sports.io/football/leagues/98.png",
+  "j2-league": "https://media.api-sports.io/football/leagues/99.png",
+
+  "k-league-1": "https://media.api-sports.io/football/leagues/292.png",
+  "k-league-2": "https://media.api-sports.io/football/leagues/293.png",
+
+  "chinese-super-league": "https://media.api-sports.io/football/leagues/169.png",
+
+  "thai-league-1": "https://media.api-sports.io/football/leagues/304.png",
+
+  "malaysia-super-league": "https://media.api-sports.io/football/leagues/288.png",
+
+  "australia-a-league": "https://media.api-sports.io/football/leagues/188.png",
+
+  "egypt-premier-league": "https://media.api-sports.io/football/leagues/233.png",
+  "morocco-botola": "https://media.api-sports.io/football/leagues/200.png",
+  "tunisia-ligue-1": "https://media.api-sports.io/football/leagues/231.png",
+  "algeria-ligue-1": "https://media.api-sports.io/football/leagues/196.png",
+  "south-africa-psl": "https://media.api-sports.io/football/leagues/203.png",
+  "ghana-premier-league": "https://media.api-sports.io/football/leagues/208.png",
+  "nigeria-npfl": "https://media.api-sports.io/football/leagues/195.png",
+
+  "mls": "https://media.api-sports.io/football/leagues/253.png",
+  "usl-championship": "https://media.api-sports.io/football/leagues/254.png",
+
+  "liga-mx": "https://media.api-sports.io/football/leagues/262.png",
+
+  "canadian-premier-league": "https://media.api-sports.io/football/leagues/399.png",
+
+  "argentina-primera-division": "https://media.api-sports.io/football/leagues/128.png",
+  "brasileirao-serie-a": "https://media.api-sports.io/football/leagues/71.png",
+  "brasileirao-serie-b": "https://media.api-sports.io/football/leagues/72.png",
+
+  "chile-primera-division": "https://media.api-sports.io/football/leagues/263.png",
+
+  "uruguay-primera-division": "https://media.api-sports.io/football/leagues/245.png",
+
+  "colombia-categoria-primera-a": "https://media.api-sports.io/football/leagues/239.png",
+
+  "peru-liga-1": "https://media.api-sports.io/football/leagues/262.png",
+
+  "ecuador-serie-a": "https://media.api-sports.io/football/leagues/257.png",
+
+  "paraguay-primera-division": "https://media.api-sports.io/football/leagues/258.png",
+
+  "bolivia-division-profesional": "https://media.api-sports.io/football/leagues/264.png",
+
+  "costa-rica-primera-division": "https://media.api-sports.io/football/leagues/216.png",
+
+  "honduras-liga-nacional": "https://media.api-sports.io/football/leagues/221.png",
+
+  "jamaica-premier-league": "https://media.api-sports.io/football/leagues/239.png",
+
+  "venezuela-primera-division": "https://media.api-sports.io/football/leagues/265.png"
+}
