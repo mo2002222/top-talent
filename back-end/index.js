@@ -25,7 +25,7 @@ const server = http.createServer(app);
 // Attach Socket.IO
 const io = new Server(server, {
     cors: {
-      origin: 'http://localhost:5173', // Allow frontend to connect
+      origin: 'https://top-talent-six.vercel.app', // Allow frontend to connect
 
     }, 
   }); 
