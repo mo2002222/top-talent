@@ -231,13 +231,12 @@ router.post('/login-user', async(req, res)=>{
 router.post('/log-out-user', (req, res)=>{
     console.log('User logged out');
     
-    res.clearCookie('token');
-    // in production
-    {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
     });
+
     res.status(200).json({message: 'User logged out successfully'});
 })
 
