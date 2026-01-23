@@ -7,6 +7,7 @@ import UserContext from "../authContext";
 import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const UploadPopup = ({ onClose, refreshPosts, setRefreshPosts }) => {
   const [files, setFiles] = useState(null); // FileList or null
@@ -156,7 +157,7 @@ const UploadPopup = ({ onClose, refreshPosts, setRefreshPosts }) => {
         });
       }, 300);
 
-      const response = await fetch("http://localhost:3000/uploadVideo", {
+      const response = await fetch(`http://${BACKEND_URL}/uploadVideo`, {
         method: "POST",
         body: formData,
       });
@@ -195,7 +196,7 @@ const UploadPopup = ({ onClose, refreshPosts, setRefreshPosts }) => {
       };
 
       // Post metadata
-      const postResponse = await fetch("http://localhost:3000/uploadPost", {
+      const postResponse = await fetch(`${BACKEND_URL}/uploadPost`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
