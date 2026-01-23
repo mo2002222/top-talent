@@ -32,7 +32,7 @@ const imageStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'uploads/postImages',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'gif'],
+        // allowed_formats: ['jpg', 'png', 'jpeg', 'gif'],
         // transformation: [{ width: 500, height: 500, crop: 'limit' }]
     }
 });
