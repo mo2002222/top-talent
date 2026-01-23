@@ -25,7 +25,7 @@ import { useSpring } from "framer-motion";
 import { AnimatePresence, motion } from "framer-motion";
 import Messenger from "./components/other/Messenger";
 import ReportContent from "./components/report/report";
-import DMCA from "./components/report/dmca";
+import DMCA from "./components/report/DMCA";
 import History from "./components/other/History";
 function App() {
   const { user } = useContext(UserContext);
