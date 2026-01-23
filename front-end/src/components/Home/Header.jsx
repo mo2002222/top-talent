@@ -172,7 +172,7 @@ const Header = ({ userInfo }) => {
             </p>
             <img
               className="rounded-full w-6 h-6 sm:w-7 sm:h-7 object-cover ring-2 ring-gray-700"
-              src={userInfo.avatar}
+              src={userInfo.avatar || "/default-avatar.png"}
               alt="user avatar"
             />
           </div>
