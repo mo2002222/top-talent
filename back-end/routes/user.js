@@ -215,9 +215,9 @@ router.post('/login-user', async(req, res)=>{
         //save token in cookie   
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false,
-            sameSite: 'Strict', 
-            maxAge: 3600000,
+            secure: true,
+            sameSite: 'none', 
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         res.status(200).json({ token, user: { id: user._id, username: user.username, email: user.email, role: user.role} });
  
@@ -233,11 +233,11 @@ router.post('/log-out-user', (req, res)=>{
     
     res.clearCookie('token');
     // in production
-    // {
-    //     httpOnly: true,
-    //     secure: false,
-    //     sameSite: 'Strict',
-    // });
+    {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+    });
     res.status(200).json({message: 'User logged out successfully'});
 })
 
