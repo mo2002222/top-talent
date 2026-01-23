@@ -177,9 +177,9 @@ router.post("/auth/google/login", async (req, res) => {
     // ✅ Set cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // true in production
-      sameSite: "Strict",
-      maxAge: 3600000,
+      secure: true, // true in production
+      sameSite: "none",
+       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
