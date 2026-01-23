@@ -19,6 +19,7 @@
     "@fortawesome/react-fontawesome": "^0.2.6",
     "@react-oauth/google": "^0.12.2",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "esbuild": "^0.25.3",
     "framer-motion": "^12.12.1",
     "lodash.debounce": "^4.0.8",
