@@ -59,7 +59,8 @@ const PostCard = ({ post, rating, compPlace }) => {
           <span className="text-gray-400">Age:</span> {post.playerAge}
         </p>
         <p className="flex items-center gap-1">
-          <span className="text-gray-400 ">Nat:</span> {post.playerNationality}{" "}
+        <span className="text-gray-400 ">Nat:</span> {post.playerNationality.length > 10 ? post.playerNationality.slice(0, 10) + ".." : post.playerNationality || "N/A"}
+
           {
             <img
               src={getFlag(post.playerNationality)}
@@ -70,7 +71,8 @@ const PostCard = ({ post, rating, compPlace }) => {
         </p>
         <p className="truncate">
           <span className="text-gray-400 ">Lg:</span>{" "}
-          {post.playerLeague.slice(0, 10)}..
+          {post.playerLeague.length > 11 ? post.playerLeague.slice(0, 11) + ".." : post.playerLeague || "N/A"}
+
           {
             <img
               src={leagueLogos[post.playerLeague] || defaultLeague}
