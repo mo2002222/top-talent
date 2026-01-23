@@ -157,7 +157,7 @@ const UploadPopup = ({ onClose, refreshPosts, setRefreshPosts }) => {
         });
       }, 300);
 
-      const response = await fetch(`http://${BACKEND_URL}/uploadVideo`, {
+      const response = await fetch(`${BACKEND_URL}/uploadVideo`, {
         method: "POST",
         body: formData,
       });
