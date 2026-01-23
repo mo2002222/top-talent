@@ -11,7 +11,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 dotenv.config();  
 app.use(cors({  
-    origin: 'https://top-talent-six.vercel.app/',
+    origin: 'https://top-talent-six.vercel.app',
     credentials: true,   
 })); 
 app.use(express.json()); 
