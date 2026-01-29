@@ -111,7 +111,7 @@ router.get("/:userId", async (req, res) => {
             : conversation.senderId;
 
         const otherUser = await User.findById(otherUserId)
-          .select("username avatar role");
+          .select("username avatar role _id");
 
         return {
           ...conversation,
