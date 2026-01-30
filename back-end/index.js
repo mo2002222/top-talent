@@ -42,25 +42,32 @@ io.on('connection', (socket) => {
       io.emit("getUsers", Array.from(onlineUsers.keys()));
     }); 
    // Handle sending message 
-    socket.on('sendMessage', async({ senderId, receiverId, content, imageUrl }) => {
-    const receiverSocketId = onlineUsers.get(receiverId);
+    socket.on('sendMessage', async ({ senderId, receiverId, content, imageUrl }) => {
+  const receiverSocketId = onlineUsers.get(receiverId);
+  if (!receiverSocketId) return;
+
+  // ✅ ALWAYS deliver the message
+  io.to(receiverSocketId).emit('getMessage', {
+    senderId,
+    content,
+    imageUrl,
+    timestamp: new Date(),
+    isReaded: false,
+  });
+
+  // 🔔 Notification only if not in active chat
+  const chattingWith = userActiveChats.get(receiverSocketId);
+
+  if (chattingWith !== senderId) {
     const username = await User.findById(senderId).select("username");
-    
-    
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit('getMessage', { senderId, content, timestamp: new Date(), imageUrl, isReaded: false });
+    io.to(receiverSocketId).emit('recive-notification', {
+      senderId,
+      type: 'message',
+      content: `${username.username} sent you a message`,
+    });
+  }
+});
 
-      const chattingWith = userActiveChats.get(receiverId);
-
-      if (chattingWith !== senderId) {
-        io.to(receiverSocketId).emit('recive-notification', {
-          senderId,
-          type: 'message',
-          content: `${username.username} sent you a message`,
-        }); 
-      } 
-    } 
-  }); 
 
   //handle send noti when liked post 
   socket.on("sendNotification-like", async ({ senderId, receiverId, postId }) => {
@@ -94,13 +101,15 @@ io.on('connection', (socket) => {
   
 
   // Handle active chat
-  socket.on("activeChat", ({ userId, chattingWith }) => {
-    userActiveChats.set(userId, chattingWith);
-  });
+  socket.on("activeChat", ({ chattingWith }) => {
+  userActiveChats.set(socket.id, chattingWith);
+});
+
   
-  socket.on("closeChat", ({ userId }) => {
-    userActiveChats.delete(userId);
-  });
+  socket.on("closeChat", () => {
+  userActiveChats.delete(socket.id);
+});
+
 
   
 
