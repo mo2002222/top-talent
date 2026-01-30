@@ -25,14 +25,16 @@ const server = http.createServer(app);
 // Attach Socket.IO
 const io = new Server(server, {
     cors: {
-      origin: 'https://top-talent-six.vercel.app', // Allow frontend to connect
-
+      origin: 'https://top-talent-six.vercel.app',
+      credentials: true,
     }, 
   }); 
  
   // Map of online users
 let onlineUsers = new Map(); 
 let userActiveChats = new Map();
+let userRooms = new Map(); // Track which rooms users are in
+
 // Handle socket connection
 io.on('connection', (socket) => {
 
@@ -41,26 +43,65 @@ io.on('connection', (socket) => {
       onlineUsers.set(userId, socket.id);
       io.emit("getUsers", Array.from(onlineUsers.keys()));
     }); 
-   // Handle sending message 
-    socket.on('sendMessage', async({ senderId, receiverId, content, imageUrl }) => {
-    const receiverSocketId = onlineUsers.get(receiverId);
-    const username = await User.findById(senderId).select("username");
-    
-    
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit('getMessage', { senderId, content, timestamp: new Date(), imageUrl, isReaded: false });
 
+    // Join room for specific chat
+    socket.on('joinRoom', (roomId) => {
+      socket.join(roomId);
+      userRooms.set(socket.id, roomId);
+      console.log(`User ${socket.id} joined room: ${roomId}`);
+    });
+
+    // Leave room
+    socket.on('leaveRoom', (roomId) => {
+      socket.leave(roomId);
+      userRooms.delete(socket.id);
+      console.log(`User ${socket.id} left room: ${roomId}`);
+    });
+
+   // Handle sending message 
+    socket.on('sendMessage', async({ senderId, receiverId, content, imageUrl, roomId }) => {
+      const receiverSocketId = onlineUsers.get(receiverId);
+      const username = await User.findById(senderId).select("username");
+      
+      // Use the room ID or create one
+      const targetRoom = roomId || [senderId, receiverId].sort().join('_');
+      
+      // Send to the room (both users will receive it)
+      io.to(targetRoom).emit('getMessage', { 
+        senderId, 
+        receiverId,
+        content, 
+        imageUrl, 
+        createdAt: new Date(), 
+        isReaded: false 
+      });
+      
+      // Also send directly to receiver if online (fallback)
+      if (receiverSocketId) {
+        io.to(receiverSocketId).emit('getMessage', { 
+          senderId, 
+          receiverId,
+          content, 
+          imageUrl, 
+          createdAt: new Date(), 
+          isReaded: false 
+        });
+      }
+
+      // Notification logic remains the same
       const chattingWith = userActiveChats.get(receiverId);
 
       if (chattingWith !== senderId) {
-        io.to(receiverSocketId).emit('recive-notification', {
-          senderId,
-          type: 'message',
-          content: `${username.username} sent you a message`,
-        }); 
+        const notificationTarget = receiverSocketId || onlineUsers.get(receiverId);
+        if (notificationTarget) {
+          io.to(notificationTarget).emit('recive-notification', {
+            senderId,
+            type: 'message',
+            content: `${username.username} sent you a message`,
+          }); 
+        }
       } 
-    } 
-  }); 
+    }); 
 
   //handle send noti when liked post 
   socket.on("sendNotification-like", async ({ senderId, receiverId, postId }) => {
@@ -94,31 +135,54 @@ io.on('connection', (socket) => {
   
 
   // Handle active chat
-  socket.on("activeChat", ({ userId, chattingWith }) => {
+  socket.on("activeChat", ({ userId, chattingWith, roomId }) => {
     userActiveChats.set(userId, chattingWith);
+    
+    // Join the specific chat room
+    const targetRoom = roomId || [userId, chattingWith].sort().join('_');
+    socket.join(targetRoom);
+    console.log(`User ${userId} active in chat with ${chattingWith}, room: ${targetRoom}`);
   });
   
   socket.on("closeChat", ({ userId }) => {
     userActiveChats.delete(userId);
-  });
-
-  
-
-  //handle typing
-  socket.on("typing", ({ senderId, receiverId }) => {
-    const receiverSocketId = onlineUsers.get(receiverId);
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("typing", { senderId });
+    
+    // Leave all rooms for this user
+    const roomId = userRooms.get(socket.id);
+    if (roomId) {
+      socket.leave(roomId);
+      userRooms.delete(socket.id);
     }
   });
 
+  //handle typing
+  socket.on("typing", ({ senderId, receiverId, isTyping = true, roomId }) => {
+    const targetRoom = roomId || [senderId, receiverId].sort().join('_');
+    const receiverSocketId = onlineUsers.get(receiverId);
+    
+    // Emit to the room
+    socket.to(targetRoom).emit("typing", { 
+      senderId, 
+      receiverId, 
+      isTyping 
+    });
+    
+    // Fallback: direct emit to receiver
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("typing", { 
+        senderId, 
+        receiverId, 
+        isTyping 
+      });
+    }
+  });
 
-
-  
-
-  
   // Handle disconnect
   socket.on('disconnect', () => {
+    // Remove from rooms
+    userRooms.delete(socket.id);
+    
+    // Remove from online users
     for (let [userId, socketId] of onlineUsers.entries()) {
       if (socketId === socket.id) {
         onlineUsers.delete(userId);
@@ -128,12 +192,6 @@ io.on('connection', (socket) => {
     io.emit("getUsers", Array.from(onlineUsers.keys()));
   });
 });
-
-
-
-
-
-
 
 // Connect to MongoDB
 mongoose
@@ -156,9 +214,6 @@ app.use(require('./routes/admin'));
 app.use(require('./routes/history'));
 app.use(require('./routes/message'));   
 
-
-
-
 server.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-})
+});
