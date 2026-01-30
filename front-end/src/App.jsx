@@ -42,44 +42,38 @@ function App() {
   const setNewMessagesArr = useNotificationStore(
     (state) => state.setNewMessagesArr,
   );
+  
   useEffect(() => {
-    if (user) {
-      socket.emit("addUser", user._id);
+  if (user) {
+    socket.emit("addUser", user._id);
+  }
+
+  socket.on("getUsers", (users) => {
+    setOnlineUsers(users);
+  });
+
+  socket.on("recive-notification", (data) => {
+    if (data.senderId === user?._id) return;
+
+    if (data.type === "message") {
+      setHasUnreadMessages(true);
     }
 
-    socket.on("getMessage", (data) => {
-      setNewMessagesArr(data.senderId);
-    });
+    toast.info(data.content);
+    setNotifications(data);
+  });
 
-    socket.on("getUsers", (users) => {
-      setOnlineUsers(users);
-    });
+  return () => {
+    socket.off("getUsers");
+    socket.off("recive-notification");
+  };
+}, [user?._id]);
 
-    socket.on("recive-notification", (data) => {
-      //prevent send toast if post author liked his own post
-      if (data.senderId === user?._id) return;
-
-      const existingNotification = notifications.find(
-        (notif) => notif.type === "like" && notif.content === data.content,
-      );
-
-      // If the notification is not a 'like' or does not already exist, show it
-      if (existingNotification && data.type === "like") return;
-      if (data.type === "message") {
-        setHasUnreadMessages(true);
-      }
-      if (!existingNotification || data.type !== "like") {
-        toast.info(data.content);
-        setNotifications(data);
-      }
-      // toast.info(data.content);
-      // setNotifications(data)
-    });
 
     return () => {
       socket.off("recive-notification");
       socket.off("getUsers");
-      socket.off("getMessage");
+      // socket.off("getMessage");
     };
   }, [
     user?._id,
