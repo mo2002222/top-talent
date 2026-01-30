@@ -51,7 +51,7 @@ const Inbox = ({
     }
 
     const handleMessage = (data) => {
-      // if (data.senderId !== receiverId) return;
+      if (data.senderId !== receiverId) return;
     
       setIsMessageRead(false);
       setMessages((prev) => [...prev, { ...data, fromSelf: false }]);
