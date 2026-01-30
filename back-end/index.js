@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: "https://top-talent-production.up.railway.app/",
+    origin: "https://top-talent-production.up.railway.app",
     credentials: true,
   })
 );
@@ -32,7 +32,7 @@ const server = http.createServer(app);
 // Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "https://top-talent-production.up.railway.app/",
+    origin: "https://top-talent-production.up.railway.app",
   },
 });
 
