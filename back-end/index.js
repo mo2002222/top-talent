@@ -75,7 +75,15 @@ io.on('connection', (socket) => {
         createdAt: new Date(), 
         isReaded: false 
       });
-      
+        socket.on('sendMessage', (data) => {
+          const { roomId, ...messageData } = data;
+          
+          // Emit to the room
+          io.to(roomId).emit('getMessage', messageData);
+          
+          // Also emit to sender for confirmation
+          socket.emit('getMessage', messageData);
+        });
       // Also send directly to receiver if online (fallback)
       if (receiverSocketId) {
         io.to(receiverSocketId).emit('getMessage', { 
