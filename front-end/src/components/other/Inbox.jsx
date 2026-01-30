@@ -82,31 +82,32 @@ const Inbox = ({
      FETCH CHAT HISTORY
   ========================= */
   useEffect(() => {
-    if (!senderId || !receiverId) return;
+  if (!senderId || !receiverId) return;
 
-    const fetchMessages = async () => {
-      setIsLoading(true);
-      try {
-        const res = await fetch(`${BACKEND_URL}/${senderId}/${receiverId}`);
-        const data = await res.json();
+  const fetchMessages = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_URL}/${senderId}/${receiverId}`);
+      const data = await res.json();
 
-        const formatted = data.map((msg) => ({
-          content: msg.content,
-          imageUrl: msg.imageUrl,
-          fromSelf: msg.senderId === senderId,
-        }));
+      const formatted = data.map((msg) => ({
+        content: msg.content,
+        imageUrl: msg.imageUrl,
+        fromSelf: msg.senderId === senderId,
+      }));
 
-        setMessages(formatted);
-      } catch (err) {
-        console.error("Failed to fetch messages", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      // ✅ DO NOT overwrite realtime messages
+      setMessages((prev) => (prev.length ? prev : formatted));
+    } catch (err) {
+      console.error("Failed to fetch messages", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    setMessages([]); // reset on chat switch
-    fetchMessages();
-  }, [senderId, receiverId]);
+  fetchMessages();
+}, [senderId, receiverId]);
+
 
   /* =========================
      SEND MESSAGE
