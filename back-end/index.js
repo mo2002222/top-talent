@@ -5,10 +5,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-
-const User = require("./modules/User");
 const Post = require("./modules/Post");
+const cookieParser = require("cookie-parser");
+const User = require("./modules/User");
 
 dotenv.config();
 
@@ -31,17 +30,18 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "https://top-talent-six.vercel.app",
-    credentials: true,
   },
 });
 
-// userId -> Set(socketId)
-const onlineUsers = new Map();
+/* ===================================================== */
+/* ⭐ CHANGE 1: userId -> Set(socketId)                  */
+/* ===================================================== */
+let onlineUsers = new Map(); // userId -> Set(socketId)
 
 io.on("connection", (socket) => {
-  // ======================
-  // ADD USER
-  // ======================
+  /* =========================
+     ADD USER
+  ========================= */
   socket.on("addUser", (userId) => {
     socket.userId = userId;
 
@@ -50,13 +50,12 @@ io.on("connection", (socket) => {
     }
 
     onlineUsers.get(userId).add(socket.id);
-
     io.emit("getUsers", Array.from(onlineUsers.keys()));
   });
 
-  // ======================
-  // ACTIVE CHAT (PER SOCKET)
-  // ======================
+  /* =========================
+     ⭐ CHANGE 2: activeChat PER SOCKET
+  ========================= */
   socket.on("activeChat", ({ chattingWith }) => {
     socket.chattingWith = chattingWith;
   });
@@ -65,9 +64,9 @@ io.on("connection", (socket) => {
     socket.chattingWith = null;
   });
 
-  // ======================
-  // SEND MESSAGE
-  // ======================
+  /* =========================
+     SEND MESSAGE
+  ========================= */
   socket.on(
     "sendMessage",
     async ({ senderId, receiverId, content, imageUrl }) => {
@@ -76,6 +75,7 @@ io.on("connection", (socket) => {
 
       const username = await User.findById(senderId).select("username");
 
+      /* ⭐ CHANGE 3: emit to ALL receiver sockets */
       sockets.forEach((socketId) => {
         io.to(socketId).emit("getMessage", {
           senderId,
@@ -98,9 +98,9 @@ io.on("connection", (socket) => {
     }
   );
 
-  // ======================
-  // TYPING
-  // ======================
+  /* =========================
+     TYPING
+  ========================= */
   socket.on("typing", ({ senderId, receiverId }) => {
     const sockets = onlineUsers.get(receiverId);
     if (!sockets) return;
@@ -110,9 +110,9 @@ io.on("connection", (socket) => {
     });
   });
 
-  // ======================
-  // DISCONNECT
-  // ======================
+  /* =========================
+     DISCONNECT
+  ========================= */
   socket.on("disconnect", () => {
     const userId = socket.userId;
     if (!userId) return;
@@ -130,17 +130,17 @@ io.on("connection", (socket) => {
   });
 });
 
-// ======================
-// DATABASE
-// ======================
+/* =========================
+   DATABASE
+========================= */
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch(console.error);
 
-// ======================
-// ROUTES
-// ======================
+/* =========================
+   ROUTES
+========================= */
 app.use(require("./routes/upload"));
 app.use(require("./routes/cloudinary"));
 app.use(require("./routes/postAPIs"));
@@ -151,5 +151,5 @@ app.use(require("./routes/history"));
 app.use(require("./routes/message"));
 
 server.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+  console.log(`Server is running on port ${port}`);
 });
