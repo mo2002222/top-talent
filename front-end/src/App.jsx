@@ -70,20 +70,6 @@ function App() {
 }, [user?._id]);
 
 
-    return () => {
-      socket.off("recive-notification");
-      socket.off("getUsers");
-      // socket.off("getMessage");
-    };
-  }, [
-    user?._id,
-    notifications,
-    setOnlineUsers,
-    setNotifications,
-    setHasUnreadMessages,
-    user,
-  ]);
-
   return (
     <>
       <Router>
