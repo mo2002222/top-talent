@@ -51,9 +51,12 @@ const Inbox = ({
     }
 
     const handleMessage = (data) => {
+      if (data.senderId !== receiverId) return;
+    
       setIsMessageRead(false);
       setMessages((prev) => [...prev, { ...data, fromSelf: false }]);
     };
+
 
     const handleTyping = ({ senderId: typingUser }) => {
       if (typingUser === receiverId) {
