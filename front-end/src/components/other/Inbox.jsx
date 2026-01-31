@@ -24,6 +24,7 @@ const Inbox = ({
 
   const messagesEndRef = useRef(null);
   const typingTimeout = useRef(null);
+  const firstScrollRef = useRef(true); // ✅ NEW
 
   const onlineUsers = useNotificationStore((state) => state.onlineUsers);
   const setIsMessageRead = useNotificationStore(
@@ -39,33 +40,26 @@ const Inbox = ({
     if (!isOpen || !senderId || !receiverId) return;
 
     const onConnect = () => {
-      // ✅ guaranteed to reach backend
       socket.emit("addUser", senderId);
       socket.emit("activeChat", { chattingWith: receiverId });
     };
 
-    if (socket.connected) {
-      onConnect();
-    } else {
-      socket.once("connect", onConnect);
-    }
+    if (socket.connected) onConnect();
+    else socket.once("connect", onConnect);
 
     const handleMessage = (data) => {
       if (data.senderId !== receiverId) return;
-    
-      setIsMessageRead(false);
+      if (typeof setIsMessageRead === "function") {
+        setIsMessageRead(false);
+      }
       setMessages((prev) => [...prev, { ...data, fromSelf: false }]);
     };
-
 
     const handleTyping = ({ senderId: typingUser }) => {
       if (typingUser === receiverId) {
         setIsTyping(true);
         clearTimeout(typingTimeout.current);
-        typingTimeout.current = setTimeout(
-          () => setIsTyping(false),
-          2000
-        );
+        typingTimeout.current = setTimeout(() => setIsTyping(false), 2000);
       }
     };
 
@@ -85,32 +79,30 @@ const Inbox = ({
      FETCH CHAT HISTORY
   ========================= */
   useEffect(() => {
-  if (!senderId || !receiverId) return;
+    if (!senderId || !receiverId) return;
 
-  const fetchMessages = async () => {
-    setIsLoading(true);
-    try {
-      const res = await fetch(`${BACKEND_URL}/${senderId}/${receiverId}`);
-      const data = await res.json();
+    const fetchMessages = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`${BACKEND_URL}/${senderId}/${receiverId}`);
+        const data = await res.json();
 
-      const formatted = data.map((msg) => ({
-        content: msg.content,
-        imageUrl: msg.imageUrl,
-        fromSelf: msg.senderId === senderId,
-      }));
+        const formatted = data.map((msg) => ({
+          content: msg.content,
+          imageUrl: msg.imageUrl,
+          fromSelf: msg.senderId === senderId,
+        }));
 
-      // ✅ DO NOT overwrite realtime messages
-      setMessages((prev) => (prev.length ? prev : formatted));
-    } catch (err) {
-      console.error("Failed to fetch messages", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        setMessages((prev) => (prev.length ? prev : formatted));
+      } catch (err) {
+        console.error("Failed to fetch messages", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  fetchMessages();
-}, [senderId, receiverId]);
-
+    fetchMessages();
+  }, [senderId, receiverId]);
 
   /* =========================
      SEND MESSAGE
@@ -148,11 +140,24 @@ const Inbox = ({
   };
 
   /* =========================
-     AUTO SCROLL
+     AUTO SCROLL (FIXED)
   ========================= */
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!messagesEndRef.current) return;
+
+    messagesEndRef.current.scrollIntoView({
+      behavior: firstScrollRef.current ? "auto" : "smooth",
+    });
+
+    firstScrollRef.current = false;
   }, [messages]);
+
+  // reset scroll when opening inbox
+  useEffect(() => {
+    if (isOpen) {
+      firstScrollRef.current = true;
+    }
+  }, [isOpen]);
 
   const isReceiverOnline = onlineUsers.includes(receiverId);
   if (!isOpen) return null;
@@ -176,11 +181,7 @@ const Inbox = ({
           )}
           <div>
             <h2 className="text-white font-semibold">Chat</h2>
-            <p
-              className={`text-xs ${
-                isReceiverOnline ? "text-green-400" : "text-red-400"
-              }`}
-            >
+            <p className={`text-xs ${isReceiverOnline ? "text-green-400" : "text-red-400"}`}>
               {isReceiverOnline ? "Active now" : "Offline"}
             </p>
           </div>
@@ -194,9 +195,7 @@ const Inbox = ({
             messages.map((msg, i) => (
               <div
                 key={i}
-                className={`flex ${
-                  msg.fromSelf ? "justify-end" : "justify-start"
-                }`}
+                className={`flex ${msg.fromSelf ? "justify-end" : "justify-start"}`}
               >
                 <div
                   className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
@@ -206,11 +205,7 @@ const Inbox = ({
                   }`}
                 >
                   {msg.imageUrl && (
-                    <img
-                      src={msg.imageUrl}
-                      alt=""
-                      className="w-32 rounded-lg mb-2"
-                    />
+                    <img src={msg.imageUrl} alt="" className="w-32 rounded-lg mb-2" />
                   )}
                   {msg.content}
                 </div>
@@ -218,10 +213,7 @@ const Inbox = ({
             ))
           )}
 
-          {isTyping && (
-            <p className="text-xs text-slate-400">Typing…</p>
-          )}
-
+          {isTyping && <p className="text-xs text-slate-400">Typing…</p>}
           <div ref={messagesEndRef} />
         </div>
 
@@ -244,9 +236,7 @@ const Inbox = ({
             onChange={(e) => setImage(e.target.files[0])}
           />
 
-          <label htmlFor="upload-image" className="cursor-pointer">
-            📎
-          </label>
+          <label htmlFor="upload-image" className="cursor-pointer">📎</label>
 
           <button
             onClick={sendMessage}
@@ -255,6 +245,21 @@ const Inbox = ({
             Send
           </button>
         </div>
+        {/* FOOTER */}
+<div className="border-t border-slate-700 py-2 text-center">
+  <button
+    onClick={() => {
+      if (callPlace === "messenger"){
+        dMood("allmessages")
+      }
+      onColse();
+    }}
+    className="text-sm text-slate-400 hover:text-white transition"
+  >
+    Close
+  </button>
+</div>
+
       </div>
     </div>
   );
