@@ -85,7 +85,7 @@ router.post("/auth/google/register", async (req, res) => {
 
     if (!user) {
       // Create a new user (no password needed)
-      const safeUsername = name.replace(/[^a-zA-Z0-9_]/g, "_");
+      const safeUsername = name.replace(/[^a-zA-Z0-9_]/g, " ");
       user = new User({
         username: safeUsername,
         email,
