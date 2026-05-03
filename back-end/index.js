@@ -147,7 +147,7 @@ io.on('connection', (socket) => {
 // Connect to MongoDB
 mongoose
 .connect(
-    `mongodb+srv://maboabdallah:${process.env.MONGODB_URI}@cluster0.wsebe.mongodb.net/topTalentDB?retryWrites=true&w=majority&ssl=true&appName=Cluster0`,
+    `mongodb+srv://mohamed2544606_db_user:${process.env.MONGODB_URI}@cluster0.cnj2kx0.mongodb.net/topTalentDB?appName=Cluster0`,
 )
 .then(() => console.log("Connected to MongoDB"))
 .catch((err) => {
