@@ -130,19 +130,19 @@ Users can upload videos, explore players, interact with content, and engage thro
   <img src="./626.png" width="80%" />
 </p>
 <p align="center">
-  <img src="./Screenshot 2026-01-24 180744.png" width="80%" />
+  <img src="./Screenshot 2026-01-24 180744.png" width="60%" />
 </p>
 <p align="center">
-  <img src="././Screenshot 2026-01-24 180813.png" width="80%" />
+  <img src="././Screenshot 2026-01-24 180813.png" width="60%" />
 </p>
 <p align="center">
-  <img src="././Screenshot 2026-01-24 180841.png" width="80%" />
+  <img src="././Screenshot 2026-01-24 180841.png" width="60%" />
 </p>
 <p align="center">
-  <img src="././Screenshot 2026-01-24 180908.png" width="80%" />
+  <img src="././Screenshot 2026-01-24 180908.png" width="60%" />
 </p>
 <p align="center">
-  <img src="././Screenshot 2026-01-24 180934.png" width="80%" />
+  <img src="././Screenshot 2026-01-24 180934.png" width="60%" />
 </p>
 
 ## 📂 Project Structure
